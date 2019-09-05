@@ -30,8 +30,8 @@ console.log(hasPrototypeProperty(book, "hasOwnProperty")); // True
 ## The [[Prototype]] Property
 An instance keeps track of its prototype through an internal property called **[[Prototype]]**. This property is a pointer back to the prototype object that the instance is using. When a new object is created, the constructor's prototype property is assigned to its **[[Prototype]]** property.  
 
-<div style="text-align:center; margin : 50px">
-    <img src="/images/prototype.png" alt="Object Hash Table" height=400px width=700px/>
+<div style="text-align:center">
+    <img src="/images/prototype.png" alt="Object Hash Table"/>
 </div>
 
 The value of the **[[Prototype]]** property can be read using the **Object.getPrototypeOf()** method on an object. 
@@ -60,21 +60,55 @@ property with the correct name, **undefined** is returned.
 Consider the following example
 ```js
 var object = {};
+// Case 1
 console.log(object.toString()); // "[object Object]"
 
 object.toString = function() {
     return "[object Custom]";
 };
+// Case 2
 console.log(object.toString()); // "[object Custom]"
 
 // delete own property
 delete object.toString;
-
+// Case 3
 console.log(object.toString()); // "[object Object]"
 
 // no effect - delete only works on own properties
 delete object.toString;
-console.log(object.toString());
-// "[object Object]"
+console.log(object.toString()); // "[object Object]"
+```
+* In the first case, the **toString()** method comes from the prototype
+* In the second case, the **toString()** method of the object shadows the prototype property.
+* In the third case, we delete **own property** of the object. It is **not possible** to delete a prototype property from an instance, because delete operator acts only on  own properties. 
 
+This can be better understood thorugh the diagram below
+
+<div style="text-align:center;">
+    <img src="/images/prototype-properties.png" alt="Object Hash Table"/>
+</div>
+
+## Caveat #3
+You **cannot assign** a value to a prototype property from an instance! 
+
+## Prototypes in Constructors
+Since prototypes are shared by all instances of a reference type, it is much more **efficient** to put the methods in the prototype and use **this** to access the current instance.
+
+```js
+function Person(name) {
+    this.name = name;
+}
+
+Person.prototype.sayName = function() {
+    console.log(this.name);
+};
+
+var person1 = new Person("Nicholas");
+var person2 = new Person("Greg");
+
+console.log(person1.name); // Nicholas
+console.log(person2.name);  // Greg 
+
+person1.sayName(); // Nicholas
+person2.sayName(); // Greg"
 ```

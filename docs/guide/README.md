@@ -3,7 +3,7 @@ An object is an **unordered list of properties** consisting of a name (always a 
 Javascript Objects can be thought of as hash tables
 
 
-<div style="text-align:center; margin : 50px">
+<div style="text-align:center;">
     <img src="/images/js-object.png" alt="Object Hash Table" height=400px width=500px/>
 </div>
 
@@ -23,8 +23,8 @@ var object2 = object1;
 ```
 This code creates a new object and places its memory location in **object1**. The assignment makes **object2** point to the same address in memory.
 
-<div style="text-align:center; margin : 50px">
-    <img src="/images/variable-memory.png" alt="Object Hash Table" height=300px/>
+<div style="text-align:center;">
+    <img src="/images/variable-memory.png" alt="Object Hash Table"/>
 </div>
 
 ## Dereferencing Objects 
