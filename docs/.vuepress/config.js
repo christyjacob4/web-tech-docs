@@ -1,5 +1,5 @@
 module.exports = {
-    title: 'Web Technologies II',
+    title: 'Web Tech Docs',
     description: 'A Guide for the Web Technologies II course',
     themeConfig: {
       lastUpdated: 'Last Updated',
