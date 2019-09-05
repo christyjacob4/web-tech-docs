@@ -7,13 +7,13 @@ Javascript Objects can be thought of as hash tables
     <img src="/images/js-object.png" alt="Object Hash Table" height=400px width=500px/>
 </div>
 
-# Creating a JS Object 
+## Creating a JS Object 
 The most common way to create a JS object is to use the **new**  operator with a constructor. A constructor is simply a function tha uses **new** to create an object. Any function can be used as a constructor. It is a general convention in JS for constructors to begin with a **Capital Letter** to distinguish them from ordinary funcitons .  
 
 ```javascript
 var object = new Object();
 ```
-# Difference between Primitives and Objects
+## Difference between Primitives and Objects
 Reference types do not store the object into the variable to which it is assigned instead it holds a pointer to a location in the memory where the object exists. This is the main difference between primitives and objects. Primitives are **stored directly in the variable**.
 
 When you assign an object to another variable, you're essentially just assigning the pointer to  and each variable references the same object in memory.
@@ -27,7 +27,7 @@ This code creates a new object and places its memory location in **object1**. Th
     <img src="/images/variable-memory.png" alt="Object Hash Table" height=300px/>
 </div>
 
-# Dereferencing Objects 
+## Dereferencing Objects 
 JS has a garbage collector that takes care of **deferencing** all the objects that have been created. However, it's a good practice to let the garbage colector know that you will no longer be using a variable by assigning it to **null**. 
 
 ```javascript
@@ -37,7 +37,7 @@ object1 = null;
 // dereference
 ```
 
-# Built-in Reference Types
+## Built-in Reference Types
 Javascript provides several built in reference types that have built in methods for ease of use
 * #### Array 
 * #### Date 
@@ -57,7 +57,7 @@ var object = new Object();
 var re = new RegExp("\\d+");
 ```
 
-# Literal Forms
+## Literal Forms
 The literal notation allows us to create a reference type without using the **new** operator. 
 
 The object is made of properties which are key-value pairs, where the key is an identifier(or a string) and the value can be any reference type. The properties of an object can be accessed using the **dot** notation as well as **index** notation. We can declare an object using the literal notation in the following way. 
@@ -117,7 +117,7 @@ console.log(shape.name)
 ---
 
 
-### However this produces an error
+#### However this produces an error
 ```js
 var shape = {
   1 : "some value"
@@ -128,7 +128,7 @@ console.log(shape.1)
     Uncaught SyntaxError: missing ) after argument list
 
 
-# Adding or removing properties
+## Adding or removing properties
 JS allows us to add properties to objects at any time
 
 ```js
@@ -155,7 +155,7 @@ console.log(shape.calcArea())
 #### Output
     100
 
-# Function Literals 
+## Function Literals 
 Functions can be defined using two methods as well. 
 * #### Using the literal  Notation 
 ```js
@@ -169,7 +169,7 @@ However, it is discouraged to use the constructor notation due to **poor readabi
 var reflect = new Function("value", "return value;");
 ```
 
-# Identifying Reference types
+## Identifying Reference types
 In case of functions, we can check its type using the **typeof** operator. However, this method doesn't work for other reference types like arrays where it returns **object**.
 ```js
 function reflect(value) {
