@@ -1,6 +1,6 @@
 # Prototypes
-Prototype is a property that is present in almost every function. The prototype is shared among all the object instances and those instances can access the properties of the prototype. For eg : The 
-**hasOwnProperty()** is defined on the generic Object prototype but it can be accessed from any object as if it were an own property as shown.
+Prototype is a property that is present in almost every function. The prototype is shared among all the object instances and all those instances can access the properties of the prototype. For eg, The 
+**hasOwnProperty()** method is defined on the generic Object prototype but it can be accessed from any object as if it were an own property as shown.
 
 ```js
 var book = {
@@ -28,7 +28,7 @@ console.log(hasPrototypeProperty(book, "hasOwnProperty")); // True
 ```
 
 ## The [[Prototype]] Property
-An instance keeps track of its prototype through an internal property called **[[Prototype]]**. This property is a pointer back to the prototype object that the instance is using. When a new object is created, the constructor's prototype property is assigned to its **[[Prototype]]** property.  
+An instance keeps track of its prototype through an internal property called **[[Prototype]]**. This property is a pointer back to the prototype object that the instance is using. When a new object is created using **new**, the constructor's prototype property is assigned to the object's **[[Prototype]]** property.  
 
 <div style="text-align:center">
     <img src="/images/prototype.png" alt="Object Hash Table"/>
@@ -41,6 +41,8 @@ var prototype = Object.getPrototypeOf(object);
 console.log(prototype === Object.prototype); // True
 ```
 For generic objects, **[[Prototype]]** is always a reference to **Object.prototype**.
+
+Some JavaScript engines also support a property called **\_\_proto\_\_** on all objects. This property allows us to both read from and write to the **[[Prototype]]** property.
 
 To test if one object is a prototype for another, we can use the **isPrototypeOf()** method
 
@@ -79,7 +81,7 @@ delete object.toString;
 console.log(object.toString()); // "[object Object]"
 ```
 * In the first case, the **toString()** method comes from the prototype
-* In the second case, the **toString()** method of the object shadows the prototype property.
+* In the second case, the **toString()** method of the object **shadows** the **toString()** method from the prototype.
 * In the third case, we delete **own property** of the object. It is **not possible** to delete a prototype property from an instance, because delete operator acts only on  own properties. 
 
 This can be better understood thorugh the diagram below
@@ -92,7 +94,7 @@ This can be better understood thorugh the diagram below
 You **cannot assign** a value to a prototype property from an instance! 
 
 ## Prototypes in Constructors
-Since prototypes are shared by all instances of a reference type, it is much more **efficient** to put the methods in the prototype and use **this** to access the current instance.
+Since prototypes are shared by all instances of a reference type, it is much more **efficient** to put the methods in the prototype and use the **this** keyword within the method to access the properties of the current instance.
 
 ```js
 function Person(name) {
@@ -112,3 +114,123 @@ console.log(person2.name);  // Greg
 person1.sayName(); // Nicholas
 person2.sayName(); // Greg"
 ```
+Here **sayName()** is defined in the prototype instead of the constructor. **sayName()** is now a **prototype property** instead of an **own property**. 
+
+One of the main concerns when using the prototype is that the data would be shared among all the instances and this could lead to some unexpected behaviour as depicted below.
+
+```js
+function Person(name) {
+    this.name = name;
+}
+
+Person.prototype.sayName = function() {
+    console.log(this.name);
+};
+
+Person.prototype.favorites = [];
+var person1 = new Person("Nicholas");
+var person2 = new Person("Greg");
+person1.favorites.push("pizza");
+person2.favorites.push("quinoa");
+console.log(person1.favorites);
+console.log(person2.favorites);
+```
+#### Expected Output
+    ["pizza"]
+    ["quinoa"] 
+#### Actual Output
+    ["pizza", "quinoa"]
+    ["pizza", "quinoa"]
+
+As you can see, the **favorites** property is defined on the prototype of person and hence is shared by all the instances. We might be expecting the two instances to have their own copies of favourites however, **person1.favorites** and **person2.favorites** point to the **same array**. So we are essentially appending to the same array.
+
+In the above example, we had to type **Person.prototype** each time we had to add a property to it. This can be replaced by a more compact notation as shown below
+
+```js
+function Person(name) {
+    this.name = name;
+}
+var obj =  {
+    sayName: function() {
+        console.log(this.name);
+    },
+    toString: function() {
+        return "[Person " + this.name + "]";
+    }
+};
+Person.prototype = obj;
+```
+
+Here we use an **object literal** to encapsulate all the properties we want to add to the prototype, and assign it just once.
+
+## Caveat #4
+When using an object literal to assign prototypes, we are essentially overwriting the prototype of Person and as a result, the **constructor** of the instance is **reset** from **Person** to **Object** as shown below.  
+
+```js
+function Person(name) {
+    this.name = name;
+}
+var obj =  {
+    sayName: function() {
+        console.log(this.name);
+    },
+    toString: function() {
+        return "[Person " + this.name + "]";
+    }
+};
+Person.prototype = obj;
+
+var person1 = new Person("Nicholas");
+console.log(person1 instanceof Person); // True
+console.log(person1.constructor === Person); // False
+console.log(person1.constructor === Object); // True
+```
+When a function is created, its prototype is created with a constructor property pointing to itself as you can see in the first figure below. The second figure represents the **obj** object from the example above.
+
+<div style="text-align:center;">
+    <img src="/images/prototype-before.png" alt="Prototype Before"/>
+</div>
+
+When we assign **obj** to **Person.prototype**, we are essentially doing the following. 
+<div style="text-align:center;">
+    <img src="/images/prototype-after.png" alt="Prototype After"/>
+</div>
+
+Now, it's evident that the constructor attribute of the object **person1** is indeed inherited from **Object.prototype**.  
+
+To avoid this, we need to restore the constructor for **Person**, while assigning the prototype as follows
+
+```js
+function Person(name) {
+    this.name = name;
+}
+
+Person.prototype = {
+    constructor: Person,
+    sayName: function() {
+        console.log(this.name);
+    },
+    toString: function() {
+        return "[Person " + this.name + "]";
+    }
+};
+var person1 = new Person("Nicholas");
+var person2 = new Person("Greg");
+
+console.log(person1 instanceof Person); // True
+console.log(person1.constructor === Person); // True
+console.log(person1.constructor === Object); // False
+
+console.log(person2 instanceof Person); // True
+console.log(person2.constructor === Person); // True
+console.log(person2.constructor === Object); // False
+```
+
+#### To summarise
+* There is **no direct link** between an **instance and it's constructor**. 
+* There is a direct link between an **instance and its prototype**.
+* There is a direct link between the **prototype and the constructor**.
+
+<div style="text-align:center;">
+    <img src="/images/prototype-instance-relationship.png" alt="prototype-instance-relationship"/>
+</div>
