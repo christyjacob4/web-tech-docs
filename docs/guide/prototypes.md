@@ -234,3 +234,26 @@ console.log(person2.constructor === Object); // False
 <div style="text-align:center;">
     <img src="/images/prototype-instance-relationship.png" alt="prototype-instance-relationship"/>
 </div>
+
+## Prototypal Inheritace
+Prototype properties are automatically available to all the object instances which is a form of **inheritance**. The object instances inherit properties from its prototype. Since the prototype is also an object, it can inherit properties from its prototype and so on. This is known as **prototype chaining**.
+
+Any object defined using the object literal notation automatically has the **[[Prototype]]** property set to **Object.prototype** which means it inherits properties from **Object.prototype**.
+
+#### Example
+```js
+var book = {
+    title: "The Principles of Object-Oriented JavaScript"
+};
+var prototype = Object.getPrototypeOf(book);
+console.log(prototype === Object.prototype); // True
+```
+## valueOf()
+**valueOf()** method is called whenever an operator is used on an object. Default action is to return the object instance. It is because of **valueOf()** that we are able to compare objects, add/ subtract objects etc. Is is also possible to override the default behaviour of **valueOf()** to cater to more complex objects.
+
+## toString()
+
+
+## Constructor Inheritance 
+
+## Constructor stealing

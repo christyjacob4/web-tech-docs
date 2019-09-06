@@ -1,6 +1,6 @@
 module.exports = {
     title: 'Web Tech Docs',
-    description: 'A Guide for the Web Technologies II course',
+    description: 'A Guide to Advanced Web Technologies',
     themeConfig: {
       lastUpdated: 'Last Updated',
       displayAllHeaders: true,
