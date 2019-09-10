@@ -13,8 +13,8 @@ module.exports = {
         '/guide/': [
           '',     
           'constructors',  /* /foo/one.html */
-          'prototypes'   /* /foo/two.html */,
-          'call-and-apply'
+          'call-and-apply',
+          'prototypes'   /* /foo/two.html */
         ],
       }
     }
