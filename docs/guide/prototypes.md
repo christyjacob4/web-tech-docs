@@ -44,6 +44,10 @@ For generic objects, **[[Prototype]]** is always a reference to **Object.prototy
 
 Some JavaScript engines also support a property called **\_\_proto\_\_** on all objects. This property allows us to both read from and write to the **[[Prototype]]** property.
 
+:::tip NOTE
+**\_\_proto\_\_** or **[[Prototype]]** is a property of an instance whereas **.prototype** is a property of a function.
+:::
+
 To test if one object is a prototype for another, we can use the **isPrototypeOf()** method
 
 ```js
@@ -249,12 +253,174 @@ var prototype = Object.getPrototypeOf(book);
 console.log(prototype === Object.prototype); // True
 ```
 ## valueOf()
-**valueOf()** method is called whenever an operator is used on an object. Default action is to return the object instance. It is because of **valueOf()** that we are able to compare objects, add/ subtract objects etc. Is is also possible to override the default behaviour of **valueOf()** to cater to more complex objects.
+**valueOf()** method is called whenever an operator is used on an object. Default action is to return the object instance. It is because of **valueOf()** that we are able to compare objects, add/subtract objects etc. Is is also possible to override the default behaviour of **valueOf()** to cater to more complex objects.
 
 ## toString()
-TBD
+**toString()** method is used as a fallback whenever **valueof()** returns a reference value instead of a primitive value.
+For example, When a string is used as one operand for the plus operator, the other operand is automatically converted to a string. If the variable is a primitive, **toString()** is called directly. If the variable is holds a reference type, **valueOf()** is called and if valueOf() returns a reference value, **toString()** is called and the returned value is used.   
+
+```js
+var book = {
+    title: "The Principles of Object-Oriented JavaScript"
+};
+var message = "Book = " + book;
+console.log(message);
+```
+#### Output 
+    "Book = [object Object]"
+
+Since book is an object, its **toString()** method is called and since **toString()** is inherited from **Object.Prototype**, it returns the default value of **[object Object]**.
+
+It is also possible to define your own **toString()** method so that it returns something more meaningful than the default.
+```js
+var book = {
+    title: "The Principles of Object-Oriented JavaScript",
+    toString: function() {
+        return "[Book " + this.title + "]"
+    }
+};
+var message = "Book = " + book;
+console.log(message);
+```
+#### Output
+    "Book = [Book The Principles of Object-Oriented JavaScript]"
 
 ## Constructor Inheritance 
-TBD
+Every function has its own prototype property as seen earlier. This prototype property is automatically assigned to be a new generic object that is inherited from **Object.Prototype**. The following is automatically done by the JS Engine.
+
+```js
+// you write this
+function YourConstructor() {
+// initialization
+}
+
+// JavaScript engine does this for you behind the scenes
+YourConstructor.prototype = Object.create(Object.prototype, {
+                            constructor: {
+                            configurable: true,
+                            enumerable: true,
+                            value: YourConstructor
+                            writable: true
+                                }
+                            });
+
+```
+Since any instance of **YourConstructor** also inherits from **Object.Prototype**, **YourConstructor** is a **subtype** of **Object** and Object is a **supertype** of **YourConstructor**.
+
+Consider the following example
+```js
+function Rectangle(length, width) {
+    this.length = length;
+    this.width = width;
+}
+Rectangle.prototype.getArea = function() {
+    return this.length * this.width;
+};
+Rectangle.prototype.toString = function() {
+    return "[Rectangle " + this.length + "x" + this.width + "]";
+};
+function Square(size) {
+    this.length = size;
+    this.width = size;
+}
+// inherits from Rectangle
+Square.prototype = new Rectangle();
+// Reset the constructor
+Square.prototype.constructor = Square;
+Square.prototype.toString = function() {
+    return "[Square " + this.length + "x" + this.width + "]";
+};
+```
+
+The square constructor has its prototype property overwritten to an instance of Rectangle. Since the constructor is also overwritten, it is reset back to Square. The **getArea()** method of **Rectangle** is inherited by instances of **Square** using **prototype based inheritance**.
+
+```js
+var rect = new Rectangle(5, 10);
+var square = new Square(6);
+console.log(rect.getArea()); // 50
+console.log(square.getArea()); // 36
+
+console.log(rect.toString()); // "[Rectangle 5x10]"
+console.log(square.toString()); // "[Square 6x6]"
+
+console.log(rect instanceof Rectangle); // true
+console.log(rect instanceof Object); // true
+console.log(rect instanceof Square); // false
+
+console.log(square instanceof Square); // true
+console.log(square instanceof Rectangle); // true
+console.log(square instanceof Object); // true
+```
+The square variable is considered an instance of Square as well as Rectangle and Object because instanceof uses the prototype chain to determine the object type.
+
+The scenario is depicted in the following diagram
+
+<div style="text-align:center;">
+    <img src="/images/square-rectangle.png" alt="prototype-instance-relationship"/>
+</div>
+
+Inheriting from **Rectangle** without using the **Rectangle** constructor.
+
+```js
+// inherits from Rectangle
+function Square(size) {
+    this.length = size;
+    this.width = size;
+}
+Square.prototype = Object.create(Rectangle.prototype, {
+                                constructor: {
+                                configurable: true,
+                                enumerable: true,
+                                value: Square,
+                                writable: true
+                                    }
+                                });
+Square.prototype.toString = function() {
+    return "[Square " + this.length + "x" + this.width + "]";
+};
+
+```
+
 ## Constructor stealing
-TBD
+In javascript, inheritance is achieved through prototype chaining so there is **no need** to explicitly call the supertype's constructor. 
+
+Recall that the **call()** and **apply()** methods can be used to call a function with an **explicit context**. When we call the supertype constructor from the subtype constructor using either **call()** or **apply()** to pass the newly created object, it is known ans **constructor stealing** because in essence we are essentially stealing the supertype's constructor for your own object. 
+
+```js
+function Rectangle(length, width) {
+    this.length = length;
+    this.width = width;
+}
+Rectangle.prototype.getArea = function() {
+    return this.length * this.width;
+};
+Rectangle.prototype.toString = function() {
+    return "[Rectangle " + this.length + "x" + this.width + "]";
+};
+// inherits from Rectangle
+function Square(size) {
+    Rectangle.call(this, size, size);
+    // optional: add new properties or override existing ones here
+}
+Square.prototype = Object.create(Rectangle.prototype, {
+                                    constructor: {
+                                    configurable: true,
+                                    enumerable: true,
+                                    value: Square,
+                                    writable: true
+                                        }
+                                    });
+
+Square.prototype.toString = function() {
+    return "[Square " + this.length + "x" + this.width + "]";
+};
+var square = new Square(6);
+console.log(square.length);
+console.log(square.width);
+console.log(square.getArea());
+```
+The **Square** constructor calls the **Rectangle** constructor and passes in **this** as well as **size** two times (once for **length** and once for **width** ). Doing so creates the **length** and **width** properties on the new object and makes
+each equal to **size** .
+
+This approach is typically referred to as **pseudoclassical inheritance** because it
+mimics classical inheritance from class-based languages.

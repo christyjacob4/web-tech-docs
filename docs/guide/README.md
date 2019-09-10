@@ -125,8 +125,9 @@ var shape = {
 console.log(shape.1)
 ```
 #### Output
-    Uncaught SyntaxError: missing ) after argument list
-
+::: danger
+Uncaught SyntaxError: missing ) after argument list
+:::
 
 ## Adding or removing properties
 JS allows us to add properties to objects at any time
