@@ -14,7 +14,8 @@ module.exports = {
           '',     
           'constructors',  /* /foo/one.html */
           'call-and-apply',
-          'prototypes'   /* /foo/two.html */
+          'prototypes'   /* /foo/two.html */,
+          'ajax'
         ],
       }
     }
