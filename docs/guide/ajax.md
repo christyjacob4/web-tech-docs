@@ -7,7 +7,7 @@ Just like **REST** and **GraphQL**, **AJAX** (Asynchronous Javascript and XML) i
 XHR is the method that is implemented in most libraries including jQuery, Angular etc. becuase it has a really functional and simple API with event handlers to check for errors etc.
 
 ## Hidden frames (GET)
-A **\<frame\>** or an **\<iframe\>** is basically like any other html tag but it has a unique property. When it's **src** attribute is set, a request is automatically sent to the URI, to fecth this resource. And this happens asynchronously without the current page reloading! 
+A **\<frame\>** or an **\<iframe\>** is basically like any other html tag but it has a unique property. When it's **src** attribute is set, a request is automatically sent to the **URL**, to fecth this resource. And this happens asynchronously without the current page reloading! 
 
 Since a **\<frame\>** is an html element, it gets rendered on the DOM but we want it to be hidden! 
 
@@ -60,8 +60,8 @@ Consider the following html page
 ```
 
 #### Heres what happens
-* The input field for **SRN** has an **onBlur event handler** registered to it. When it looses focus, the **src attribute** of the **iframe** is set, which automatically makes a **GET** request to the server.
-* The **response** from the server **contains a script** that causes the **responseHandler()** function to execute and populate the response on the page.
+* The input field for **SRN** has an **onBlur event handler** registered to it. When it looses focus, the **src attribute** of the **iframe** is set in **getDetails()**, which automatically makes a **GET** request to the server.
+* The **response** from the server **contains a script** that contains a call to **responseHandler()** function, to execute and populate the response on the page.
 
 #### Server Side Script (test.php)
 ```php {1,10,12}
@@ -79,7 +79,7 @@ Consider the following html page
 </script>
 ```
 * The query parameters are present in the **$_GET** global array. 
-* We extract the parameters using the **extract** function and this makes the variable **$day** available. 
+* We extract the parameters using the **extract** function and this makes the variable **$srn** available. 
 * We simply check some conditions and return an appropriate message. 
 * A peculiar thing about this php script is that, it is enclosed in **\<script\>** tags which means that we are returning **html** from the server.  
 
@@ -139,10 +139,10 @@ This is an extension of the same technique as before but, for **POST** requests.
 ```
 * On the server side we just extract the parameters from the **$_POST** global array.
 
-### Advantages
+### Advantages of Hidden Frames Approach
 * The hidden frames method **preserves** the **browser history** and allows the user to use the back and forward buttons effectively.
 * It also allows us to **use both GET** and **POST** HTTP methods for implementing AJAX.
-### Disadvantages
+### Disadvantages of Hidden Frames Approach
 * There is **no support for Cross Origin Resource Sharing** (CORS) using this method.
 * The method relies on the fact that the server always returns a correct and valid response. i.e. there is **no error handling mechanism** built into the hidden frames method.
 * The **developer cannot control** the HTTP request nor the HTTP response being returned.
@@ -151,20 +151,92 @@ This is an extension of the same technique as before but, for **POST** requests.
 ## Image based AJAX
 This method is similar to hidden frames. We create an **\<img\>** element programatically and never append it to the DOM. 
 
-used mainly for binary responses since only images can be returned.
+Changing the src property of the image tag, triggers a http request to fetch the specified resource asynchronously. But the returned data is an image and we have to use the image to take decisions. 
+For eg. to check the availability of a username, the user enters a username number, a request is sent asynchronously and based on the dimensions of the image returned, we can make a decision as to whether the username is available or not. In this case, the server could return a 1x1 image if the username is available and a 2x2 image if the username is unavailable. 
 
-return either an existing image  -- requires contentType header, and location header
-generate an image and return it.
+But what if we would like more information about the username? What are the ameneties in the username ? etc. We would have to send this information by setting a cookie. Cookies could be disabled for whatever reason.
+
+There are two ways to do this on the server side. 
+1) Redirection to an image
+2) Creating an image programatically and then returning it to the output stream. 
+
+
+```html
+<html>
+<head>
+	<script>
+		function checkUname() {
+			var uname = document.getElementById("uname");
+			im = document.createElement("img");
+			im.src = "test.php?uname=" + uname.value
+			im.onload = success;
+			im.onerror = failure;
+		}
+		function success() {
+			msgBox = document.getElementById("msg")
+			if (im.width == 1)
+				msgBox.innerHTML = "Not Available"
+			else if (im.width == 2) 
+				msgBox.innerHTML = "Available"
+			else 
+				msgBox.innerHTML = "Where did that come from???"
+		}
+		function failure() {
+			msgBox.innerHTML = "Wrecked...!!!"
+		}
+	</script>
+</head>
+<body>
+	<form>
+		User Name: <input type="text" id="uname" onblur="checkUname()" /><br />
+		<div id="msg"></div>
+	</form>
+</body>
+</html>
+```
+#### Here's what happens
+* The input field for **User name** has an **onBlur event handler** registered to it. When it looses focus, the **src attribute** of the **image** is set, which automatically makes a **GET** request to the **URL**.
+* The event handlers for the image are assigned. If the image loads successfully, the **onload** event is triggered & if the image fails to load **onerror** event is triggered allowing us to take precautionary measures.
+* In the success method, we **check the dimensions** of the image and add an appropriate message to the **\<div\>**.
+
+#### Server Side Script (test.php)
+```php {3}
+<?php
+	extract($_GET);
+	if($uname=="USER1"||$uname=="USER2"||$uname=="USER3"){
+		$im=imagecreate(1,1);
+		/*Before you can use any sort of colours in your image at all, you will need to allocate them. Colours are represented by three digits, known as the RGB value. The first digit denotes the red component, the second the green and the third blue, hence RGB, for Red-Green-Blue. These are the same colour values that you use for your web page as well as numerous other computer applications.
+		Colours are allocated using the imagecolorallocate() function. This function will automatically fill the background of the image with the colour the first time you call it, as well as return an identifier for that particular colour. Subsequent calls to imagecolorallocate() will simply create a colour identifier for your colour, without affecting your image background.*/
+		imagecolorallocate($im,255,255,255);
+	}
+	else{
+		$im=imagecreate(2,2);
+		imagecolorallocate($im,255,255,255);	
+	}
+	imagejpeg($im);
+?>
+```
+#### Here's what happens 
+* The **imagecreate()** creates an image with the specified **width** and **height** in that order, and returns a **resource identifier** to the image.
+* 
 
 
 
-### Advantages 
-* There is some degree of error handling involved by using the onload and onerror events of img, we can check if the image has loaded successfully indicating a valid response from the server and vice-versa.
-* Cross Domain is no longer a problem since  
+
+
+
+
+### Advantages of Image based Approach
+* There is **some** degree of **error handling** involved by using the **onload** and **onerror** events of **\<img\>**, we can check if the image has loaded successfully, which indicates a valid response from the server and vice-versa.
+* **Cross Domain Requests** is no longer a problem since  
 * High level of compatiblity since images work similarly on all browsers.
 
-### Disadvantages
-* Not possible to sent back text. The only way possible it to set a cookie x
+### Disadvantages of Image based Approach
+* Only **GET requests** are possible.
+* Images sent back can only be used to make a **binary decision**. 
+* Textual data can **only** be **retreived through cookies** which is both limiting and dangerous.
+* **Cookies** may be **disabled**.
+* **Images** may be **disabled**. 
 
 
 
