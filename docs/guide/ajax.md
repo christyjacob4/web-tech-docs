@@ -1,4 +1,4 @@
-# Ajax
+# AJAX
 Just like **REST** and **GraphQL**, **AJAX** (Asynchronous Javascript and XML) is basically a guideline and it's implementation is left to the developer. Over the years though, few methods have become more popular than the others and that's what we'll be discussing about.
 * #### Hidden Frames
 * #### Image based Ajax
@@ -146,7 +146,10 @@ This is an extension of the same technique as before but, for **POST** requests.
 ## Disadvantages of Hidden Frames
 * There is **no support for Cross Origin Resource Sharing** (CORS) using this method.
 * The method relies on the fact that the server always returns a correct and valid response. i.e. there is **no error handling mechanism** built into the hidden frames method.
-* 
+
+
+
+
 ## Image based AJAX
 This method is similar to hidden frames. We create an **\<img\>** element programatically and never append it to the DOM. 
 
@@ -157,3 +160,31 @@ generate an image and return it.
 
 ### Disadvantages of this approach compared to hidden frame?
     Not possible to sent back text. The only way possible it to set a cookie x
+
+
+
+## Dynamic Scripts and Stylesheets 
+
+
+
+## XHR
+
+ready state = 0 = var xhr = new XMLHttpRequest()
+            = 1 = xhr.open("GET", url, true)
+            = 2 = xhr.send()
+            = 3 = processing
+            = 4 = Completed 
+status codes 100
+             200 OK
+             300 Redirection
+             302  
+             400 Client side error
+             500 Server side error
+
+xhr.onReadyStateChanged = eventHandler
+
+### For text files 
+### for JSON GET
+### for JSON POST
+### for XML
+### for binary data (Video Streaming)

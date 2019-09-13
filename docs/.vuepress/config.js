@@ -15,7 +15,8 @@ module.exports = {
           'constructors',  /* /foo/one.html */
           'call-and-apply',
           'prototypes'   /* /foo/two.html */,
-          'ajax'
+          'ajax',
+          'cors'
         ],
       }
     }
