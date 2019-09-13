@@ -4,8 +4,7 @@ Just like **REST** and **GraphQL**, **AJAX** (Asynchronous Javascript and XML) i
 * #### Image based Ajax
 * #### Dynamic Scripts
 * #### XHR (XML Http Request) 
-XHR is the method that is implemented in most libraries including jQuery, Angular etc. becuase it is really simple to use and also 
-
+XHR is the method that is implemented in most libraries including jQuery, Angular etc. becuase it has a really functional and simple API with event handlers to check for errors etc.
 
 ## Hidden frames (GET)
 A **\<frame\>** or an **\<iframe\>** is basically like any other html tag but it has a unique property. When it's **src** attribute is set, a request is automatically sent to the URI, to fecth this resource. And this happens asynchronously without the current page reloading! 
@@ -140,15 +139,14 @@ This is an extension of the same technique as before but, for **POST** requests.
 ```
 * On the server side we just extract the parameters from the **$_POST** global array.
 
-## Advantages of Hidden Frames
+### Advantages of Hidden Frames
 * The hidden frames method **preserves** the **browser history** and allows the user to use the back and forward buttons effectively.
 * It also allows us to **use both GET** and **POST** HTTP methods for implementing AJAX.
-## Disadvantages of Hidden Frames
+### Disadvantages of Hidden Frames
 * There is **no support for Cross Origin Resource Sharing** (CORS) using this method.
 * The method relies on the fact that the server always returns a correct and valid response. i.e. there is **no error handling mechanism** built into the hidden frames method.
-
-
-
+* The **developer cannot control** the HTTP request nor the HTTP response being returned.
+* Highly browser depenedent since there are several versions of **\<frame\>**, **\<iframe\>** etc.
 
 ## Image based AJAX
 This method is similar to hidden frames. We create an **\<img\>** element programatically and never append it to the DOM. 
@@ -158,7 +156,14 @@ used mainly for binary responses since only images can be returned.
 return either an existing image  -- requires contentType header, and location header
 generate an image and return it.
 
-### Disadvantages of this approach compared to hidden frame?
+
+
+### Advantages 
+* There is some degree of error handling involved by using the onload and onerror events of img, we can check if the image has loaded successfully indicating a valid response from the server and vice-versa.
+* Cross Domain is no longer a problem 
+* High level of compatiblity since images work similarly 
+
+### Disadvantages
     Not possible to sent back text. The only way possible it to set a cookie x
 
 
