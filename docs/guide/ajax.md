@@ -151,7 +151,7 @@ This is an extension of the same technique as before but, for **POST** requests.
 ## Image based AJAX
 This method is similar to hidden frames. We create an **\<img\>** element programatically and never append it to the DOM. 
 
-Changing the src property of the image tag, triggers a http request to fetch the specified resource asynchronously. But the returned data is an image and we have to use the image to take decisions. 
+Changing the src property of the **\<img\>** tag, triggers a http request to fetch the specified resource asynchronously. But the returned data is an image and we have to use the image to take decisions. 
 For eg. to check the availability of a username, the user enters a username number, a request is sent asynchronously and based on the dimensions of the image returned, we can make a decision as to whether the username is available or not. In this case, the server could return a 1x1 image if the username is available and a 2x2 image if the username is unavailable. 
 
 But what if we would like more information about the username? What are the ameneties in the username ? etc. We would have to send this information by setting a cookie. Cookies could be disabled for whatever reason.
@@ -161,6 +161,7 @@ There are two ways to do this on the server side.
 2) Creating an image programatically and then returning it to the output stream. 
 
 
+### Approach 1 (Creating an Image on the server side)
 ```html
 <html>
 <head>
@@ -200,13 +201,11 @@ There are two ways to do this on the server side.
 * In the success method, we **check the dimensions** of the image and add an appropriate message to the **\<div\>**.
 
 #### Server Side Script (test.php)
-```php {3}
+```php
 <?php
 	extract($_GET);
 	if($uname=="USER1"||$uname=="USER2"||$uname=="USER3"){
 		$im=imagecreate(1,1);
-		/*Before you can use any sort of colours in your image at all, you will need to allocate them. Colours are represented by three digits, known as the RGB value. The first digit denotes the red component, the second the green and the third blue, hence RGB, for Red-Green-Blue. These are the same colour values that you use for your web page as well as numerous other computer applications.
-		Colours are allocated using the imagecolorallocate() function. This function will automatically fill the background of the image with the colour the first time you call it, as well as return an identifier for that particular colour. Subsequent calls to imagecolorallocate() will simply create a colour identifier for your colour, without affecting your image background.*/
 		imagecolorallocate($im,255,255,255);
 	}
 	else{
@@ -217,14 +216,9 @@ There are two ways to do this on the server side.
 ?>
 ```
 #### Here's what happens 
-* The **imagecreate()** creates an image with the specified **width** and **height** in that order, and returns a **resource identifier** to the image.
-* 
-
-
-
-
-
-
+* The **imagecreate()** function creates an image with the specified **width** and **height** in that order, and returns a **resource identifier** to the image.
+* Colours are allocated using the **imagecolorallocate()** function. It automatically fills the background of the image with the colour the first time you call it, as well as return an identifier for that particular colour. Subsequent calls to **imagecolorallocate()** will simply create a colour identifier, without affecting your image background.
+* We return a **1x1** image to indicate **non-availability** and a **2x2** image if the username is **available**.
 
 ### Advantages of Image based Approach
 * There is **some** degree of **error handling** involved by using the **onload** and **onerror** events of **\<img\>**, we can check if the image has loaded successfully, which indicates a valid response from the server and vice-versa.
@@ -234,7 +228,7 @@ There are two ways to do this on the server side.
 ### Disadvantages of Image based Approach
 * Only **GET requests** are possible.
 * Images sent back can only be used to make a **binary decision**. 
-* Textual data can **only** be **retreived through cookies** which is both limiting and dangerous.
+* Textual data can **only** be **retreived through cookies** which is both limiting **(300 per machine)** and dangerous (cookies **aren't encrypted**).
 * **Cookies** may be **disabled**.
 * **Images** may be **disabled**. 
 
