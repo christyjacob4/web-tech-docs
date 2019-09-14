@@ -18,6 +18,11 @@ this was done to ensure securirty. as CDNs and other others gained more populrit
 whehn you send a reuest frokm yuor site to some other ste, the server sends back aa response, it is innfacrt **the  browser** which checks certain the headers in 
 the response and **enforces the sanme origin policy** 
 
+<div style="text-align:center">
+    <img src="/images/cors.png" alt="CORS Image"/>
+</div>
+
+
 enable cors on the server side by allowing Access control headers. 
 
 Simple requests 
@@ -25,7 +30,7 @@ get, head,
 
 post is a simple request as long as 
 1 ) doen'st havr any custom headers
-2) The content typs is text/ form url encoded or multipart form data.
+1) The content typs is text/ form url encoded or multipart form data.
 
 
 Preflight requests
