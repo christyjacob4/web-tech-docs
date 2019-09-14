@@ -1,4 +1,4 @@
-# AJAX
+# AJAX Techniques
 Just like **REST** and **GraphQL**, **AJAX** (Asynchronous Javascript and XML) is basically a guideline and it's implementation is left to the developer. Over the years though, few methods have become more popular than the others and that's what we'll be discussing about.
 * #### Hidden Frames
 * #### Image based Ajax
@@ -149,17 +149,16 @@ This is an extension of the same technique as before but, for **POST** requests.
 * Highly browser depenedent since there are several versions of **\<frame\>**, **\<iframe\>** etc.
 
 ## Image based AJAX
-This method is similar to hidden frames. We create an **\<img\>** element programatically and never append it to the DOM. 
+This method is similar to hidden frames. We create an **\<img\>** element programatically but never append it to the DOM. 
+Changing the src property of the **\<img\>** tag, triggers a **http request** to fetch the specified resource **asynchronously**. The data returned in this case is an image and we need to make decisions based on the returned image.
 
-Changing the src property of the **\<img\>** tag, triggers a http request to fetch the specified resource asynchronously. But the returned data is an image and we have to use the image to take decisions. 
-For eg. to check the availability of a username, the user enters a username number, a request is sent asynchronously and based on the dimensions of the image returned, we can make a decision as to whether the username is available or not. In this case, the server could return a 1x1 image if the username is available and a 2x2 image if the username is unavailable. 
+For eg. to check the **availability of a username**, the user enters a username, a request is sent asynchronously and based on the dimensions of the image returned, we can make a decision as to whether the username is available or not. In this case, the server could return a **1x1 image** if the username is **not available** and a **2x2 image** if the username is **available**. 
 
-But what if we would like more information about the username? What are the ameneties in the username ? etc. We would have to send this information by setting a cookie. Cookies could be disabled for whatever reason.
+This only enables us to make **binary decisions**. If we had to fetch more information, we would have to send this information by setting a cookie. But this is **not very robiust** since **cookies** could be **disabled** by the user.
 
 There are two ways to do this on the server side. 
-1) Redirection to an image
-2) Creating an image programatically and then returning it to the output stream. 
-
+1) Creating an image programatically and then returning it to the output stream.
+2) Redirecting to an image. 
 
 ### Approach 1 (Creating an Image on the server side)
 ```html
@@ -205,10 +204,12 @@ There are two ways to do this on the server side.
 <?php
 	extract($_GET);
 	if($uname=="USER1"||$uname=="USER2"||$uname=="USER3"){
+		// Username Not Available
 		$im=imagecreate(1,1);
 		imagecolorallocate($im,255,255,255);
 	}
 	else{
+		// USername available
 		$im=imagecreate(2,2);
 		imagecolorallocate($im,255,255,255);	
 	}
@@ -219,6 +220,25 @@ There are two ways to do this on the server side.
 * The **imagecreate()** function creates an image with the specified **width** and **height** in that order, and returns a **resource identifier** to the image.
 * Colours are allocated using the **imagecolorallocate()** function. It automatically fills the background of the image with the colour the first time you call it, as well as return an identifier for that particular colour. Subsequent calls to **imagecolorallocate()** will simply create a colour identifier, without affecting your image background.
 * We return a **1x1** image to indicate **non-availability** and a **2x2** image if the username is **available**.
+
+
+### Approach 2 (Redirecting the user to an image resource)
+It is also possible to redirect the user to predefined images that are already stored on the server or elsewhere by specifying the appropriate headers. For eg. we could have two images on the server namely **available.jpg** and **not_available.jpg** with dimensions 2x2 and 1x1 respectively. If the username is available, we return available.jpg else we return not_available.jpg. The dimensions could be anything. I chose the smallest dimensions so that it doesn't unnecessarily eat up badnwidth.
+
+```php
+<?php
+	extract($_GET);
+	header(“Content-type: image/jpeg”);
+	if($uname=="USER1"||$uname=="USER2"||$uname=="USER3"){
+		// Username not available
+		header(“Location: not_available.jpg”);
+	}
+	else{
+		// Username available
+		header(“Location: available.jpg”);
+	}
+?>
+```
 
 ### Advantages of Image based Approach
 * There is **some** degree of **error handling** involved by using the **onload** and **onerror** events of **\<img\>**, we can check if the image has loaded successfully, which indicates a valid response from the server and vice-versa.
