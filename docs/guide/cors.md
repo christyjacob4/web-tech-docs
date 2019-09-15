@@ -15,7 +15,7 @@ An  XHR can only originate from the same origin.
 this was done to ensure securirty. as CDNs and other others gained more populrity, 
 
 
-whehn you send a reuest frokm yuor site to some other ste, the server sends back aa response, it is innfacrt **the  browser** which checks certain the headers in 
+when you send a reuest frokm yuor site to some other ste, the server sends back aa response, it is innfacrt **the  browser** which checks certain the headers in 
 the response and **enforces the sanme origin policy** 
 
 <div style="text-align:center">

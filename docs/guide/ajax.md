@@ -260,25 +260,26 @@ It is also possible to redirect the user to predefined images that are already s
 
 ## XHR
 
-ready state = 0 = var xhr = new XMLHttpRequest()
-            = 1 = xhr.open("GET", url, true)
-            = 2 = xhr.send()
-            = 3 = processing
-            = 4 = Completed 
-status codes 100
-             200 OK
-             300 Redirection
-             302  
-             400 Client side error
-             500 Server side error
+TBD
+	ready state = 0 = var xhr = new XMLHttpRequest()
+				= 1 = xhr.open("GET", url, true)
+				= 2 = xhr.send()
+				= 3 = processing
+				= 4 = Completed 
+	status codes 100
+				200 OK
+				300 Redirection
+				302  
+				400 Client side error
+				500 Server side error
 
-xhr.onReadyStateChanged = eventHandler
+	xhr.onReadyStateChanged = eventHandler
 
-### For text files 
-### for JSON GET
-### for JSON POST
-### for XML
-### for binary data (Video Streaming)
+	### For text files 
+	### for JSON GET
+	### for JSON POST
+	### for XML
+	### for binary data (Video Streaming)
 
 
 
