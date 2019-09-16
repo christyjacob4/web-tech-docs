@@ -7,6 +7,7 @@ Just like **REST** and **GraphQL**, **AJAX** (Asynchronous Javascript and XML) i
 XHR is the method that is implemented in most libraries including jQuery, Angular etc. becuase it has a really functional and simple API with event handlers to check for errors etc.
 
 ## Hidden frames (GET)
+It's crucial to understand how this method works since the following methods also use the same concept. 
 A **\<frame\>** or an **\<iframe\>** is basically like any other html tag but it has a unique property. When it's **src** attribute is set, a request is automatically sent to the **URL**, to fecth this resource. And this happens asynchronously without the current page reloading! 
 
 Since a **\<frame\>** is an html element, it gets rendered on the DOM but we want it to be hidden! 
@@ -150,7 +151,7 @@ This is an extension of the same technique as before but, for **POST** requests.
 
 ## Image based AJAX
 This method is similar to hidden frames. We create an **\<img\>** element programatically but never append it to the DOM. 
-Changing the src property of the **\<img\>** tag, triggers a **http request** to fetch the specified resource **asynchronously**. The data returned in this case is an image and we need to make decisions based on the returned image.
+**Changing the src** property of the **\<img\>** tag, triggers a **http request** to fetch the specified resource **asynchronously**. The data returned in this case is an image and we need to make decisions based on the returned image.
 
 For eg. to check the **availability of a username**, the user enters a username, a request is sent asynchronously and based on the dimensions of the image returned, we can make a decision as to whether the username is available or not. In this case, the server could return a **1x1 image** if the username is **not available** and a **2x2 image** if the username is **available**. 
 
@@ -254,8 +255,66 @@ It is also possible to redirect the user to predefined images that are already s
 
 
 
-## Dynamic Scripts and Stylesheets 
+## Dynamic Scripts
+Similar to the previous approaches, we dynamically create a **\<script\>** element and set it's src attribute. Unlike the Image based approach, we have to **append the created \<script\> to the DOM** for this to work. 
 
+This can be done as follows
+
+```html
+<html>
+<body>
+	<div id="display">
+	</div>
+	<button onclick="load()">Press to load</button>
+	<script>
+		function load() {
+			s = document.createElement('script');
+			s.src = "bar.php";
+			document.body.append(s);
+		}
+	</script>
+</body>
+</html>
+```
+#### Here's what happens
+* The button has an **onclick()** event handler attached to it, which is **triggered** when the **button is clicked**.
+* In the event handler, we simply **create a new \<script\>** tag and set it's **src attribute**, which triggers a **GET request** to **bar.php**. 
+* The script element is then **appended** to the **DOM**.  
+
+#### Server Side Script (bar.php)
+```php
+<?php
+	$text = "This is the information we send back to the client. Ideally this would be fetched from a database.";
+	echo 'document.getElementById("display").innerHTML+="'.$text.'"';
+?>
+```
+#### Here's what happens 
+* 
+
+
+Once the **php script** finishes executing, our **html page** looks like this. This causes the fetched information to be **loaded into the \<div\>** to be displayed.
+
+```html {13,14,15}
+<html>
+<body>
+	<div id="display">
+	</div>
+	<button onclick="load()">Press to load</button>
+	<script>
+		function load() {
+			s = document.createElement('script');
+			s.src = "bar.php";
+			document.body.append(s);
+		}
+	</script>
+	<script>
+		document.getElementById("display").innerHTML+= "This is the information we send back to the client. Ideally this would be fetched from a database."
+	</script>
+</body>
+</html>
+```
+
+## Dynamic Stylesheets
 
 
 ## XHR
