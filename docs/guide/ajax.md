@@ -289,13 +289,12 @@ This can be done as follows
 ?>
 ```
 #### Here's what happens 
-* 
+* We return **executable JS code** back to the client, where we append the fetched information to the **innerHTML** property. 
 
-
-Once the **php script** finishes executing, our **html page** looks like this. This causes the fetched information to be **loaded into the \<div\>** to be displayed.
+Once the **php script** finishes execution, our **html page** looks like this. This causes the fetched information to be **loaded into the \<div\>** to be displayed.
 
 ```html {13,14,15}
-<html>
+<html>	
 <body>
 	<div id="display">
 	</div>
@@ -314,32 +313,88 @@ Once the **php script** finishes executing, our **html page** looks like this. T
 </html>
 ```
 
+### Advantages of Dynamic Scripts
+* **Cross Domain requests** are **possible** with this approach.
+* Both **onload** and **onerror** event handlers can also be set, allowing for **basic error handling** features.  
+
+### Disadvantages of Dynamic Scripts
+* Only **GET requests** are possible using this method. 
+
 ## Dynamic Stylesheets
+This is very similar to the scripts approach. Here we create a **\<style\>** element and set it's **href attribute** to trigger the **GET  request**.
+
+Also, **instead of appending** the created element **to the \<body\>**, we **append it** to the **\<head\>**.
 
 
-## XHR
+## XHR (XML Http Request)
+This is the most popular method that is used to make AJAX requests to a remote url. It is also very flexible allowing us to use multiple request methods to process the requst. 
 
-TBD
-	ready state = 0 = var xhr = new XMLHttpRequest()
-				= 1 = xhr.open("GET", url, true)
-				= 2 = xhr.send()
-				= 3 = processing
-				= 4 = Completed 
-	status codes 100
-				200 OK
-				300 Redirection
-				302  
-				400 Client side error
-				500 Server side error
+Let's go through the process of creating a XHR and processing its response.
 
-	xhr.onReadyStateChanged = eventHandler
+#### 1) Firstly we need to create a new XHR object.
+```js
+var xhr = new XMLHttpRequest();
+```
 
-	### For text files 
-	### for JSON GET
-	### for JSON POST
-	### for XML
-	### for binary data (Video Streaming)
+#### 2) Set the readystate change handler
+The xhr object has a property called readyState that keeps track of the different events during the lifetime of an XHR onject. The readyState can take on the following values.
 
+    
+| readyState | Lifecycle | 
+| :---: | :---: |
+| 0 | var xhr = new XMLHttpRequest() |
+| 1 | xhr.open("GET", url, true) |
+| 2 | xhr.send() |
+| 3 | Processing |
+| 4 | Completed |
+
+ 
+* #### Using named functions 
+```js
+function handler() {
+	// Do stuff
+}
+xhr.onreadystatechange = handler
+```
+* #### Using anonymous functions
+```js
+xhr.onreadystatechange = function(){
+	// Do Stuff
+}
+```
+Within the handler we need to first check if the ready state equals 4 to ensure that the response has been received. We also need to check if the response status is successful. 
+
+| Response Status | Reason | 
+| :---: | :---: |
+| 200 | OK |
+| 300 | Redirection |
+| 4xx | Client Side Error |
+| 5xx | Server Side Error |
+
+```js
+xhr.onreadystatechange = function(){
+	if(this.status === 200 && this.readyState === 4){
+		// Do stuff
+	}
+}
+```
+
+#### 3) Specify request parameters
+We then use the open method to specify our request method, the url and if the function should execute asynchronously
+```js
+xhr.open("GET", "http://foo.com", true)
+```
+For **POST** requests, we need to additionally specify the **MIME type** of the data using the **Content-type** header.
+
+```js
+xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+```
+
+#### 4) Send the request
+
+```js
+xhr.send()
+```
 
 
 
