@@ -139,10 +139,12 @@ person2.favorites.push("quinoa");
 console.log(person1.favorites);
 console.log(person2.favorites);
 ```
-#### Expected Output
+**Expected Output**
+
     ["pizza"]
     ["quinoa"] 
-#### Actual Output
+**Actual Output**
+
     ["pizza", "quinoa"]
     ["pizza", "quinoa"]
 
@@ -230,7 +232,8 @@ console.log(person2.constructor === Person); // True
 console.log(person2.constructor === Object); // False
 ```
 
-#### To summarise
+**To summarise**  
+
 * There is **no direct link** between an **instance and it's constructor**. 
 * There is a direct link between an **instance and its prototype**.
 * There is a direct link between the **prototype and the constructor**.
@@ -244,7 +247,8 @@ Prototype properties are automatically available to all the object instances whi
 
 Any object defined using the object literal notation automatically has the **[[Prototype]]** property set to **Object.prototype** which means it inherits properties from **Object.prototype**.
 
-#### Example
+**Example**  
+
 ```js
 var book = {
     title: "The Principles of Object-Oriented JavaScript"
@@ -266,7 +270,8 @@ var book = {
 var message = "Book = " + book;
 console.log(message);
 ```
-#### Output 
+**Output**  
+
     "Book = [object Object]"
 
 Since book is an object, its **toString()** method is called and since **toString()** is inherited from **Object.Prototype**, it returns the default value of **[object Object]**.
@@ -282,7 +287,8 @@ var book = {
 var message = "Book = " + book;
 console.log(message);
 ```
-#### Output
+**Output**  
+
     "Book = [Book The Principles of Object-Oriented JavaScript]"
 
 ## Constructor Inheritance 

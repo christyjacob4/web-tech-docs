@@ -67,7 +67,8 @@ function func1(a, b, c) {
 }
 func1(1, 2, 3);
 ```
-#### Output
+**Output**  
+
     1
     2
     3

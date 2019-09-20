@@ -39,12 +39,12 @@ object1 = null;
 
 ## Built-in Reference Types
 Javascript provides several built in reference types that have built in methods for ease of use
-* #### Array 
-* #### Date 
-* #### Error
-* #### Function
-* #### Object
-* #### RegExp
+* **Array** 
+* **Date** 
+* **Error**
+* **Function**
+* **Object**
+* **RegExp**
   
 Objects of the above mentioned reference types can also be instantiated using the **new** keyword.
 
@@ -72,11 +72,13 @@ var shape = {
 }
 console.log(shape.calcArea())
 ```
-#### Output
+**Output**  
+    
     100
 
 
-#### The following are considered to be valid
+**The following are considered to be valid**  
+
 ```js
 var shape = {
   1 : 3,
@@ -85,7 +87,8 @@ var shape = {
 console.log(shape[1])
 console.log(shape.name)
 ```
-#### Output
+**Output**  
+
     3
     square
 ---
@@ -99,7 +102,8 @@ var shape = {
 console.log(shape['1'])
 console.log(shape['name'])
 ```
-#### Output
+**Output**  
+
     3
     square
 ---
@@ -112,19 +116,22 @@ var shape = {
 }
 console.log(shape.name)
 ```
-#### Output
+**Output**  
+
     square
 ---
 
 
-#### However this produces an error
+**However this produces an error**  
+
 ```js
 var shape = {
   1 : "some value"
 }
 console.log(shape.1)
 ```
-#### Output
+**Output**  
+
 ::: danger
 Uncaught SyntaxError: missing ) after argument list
 :::
@@ -137,10 +144,11 @@ var object1 = new Object();
 object1.myCustomProperty = "Awesome!";
 console.log(object1.myCustomProperty);
 ```
-#### Output
+**Output**  
+
     Awesome!
 ---
-#### Similarly
+**Similarly**  
 
 ```js
 var shape = {
@@ -153,18 +161,19 @@ shape.calcArea = function() {
 }
 console.log(shape.calcArea())
 ```
-#### Output
+**Output**  
+
     100
 
 ## Function Literals 
 Functions can be defined using two methods as well. 
-* #### Using the literal  Notation 
+* **Using the literal  Notation** 
 ```js
 function reflect(value) {
     return value;
 }
 ```
-* #### Using the constructor. 
+* **Using the constructor.**   
 However, it is discouraged to use the constructor notation due to **poor readability** and lack of **debugger support** as shown in the example.
 ```js
 var reflect = new Function("value", "return value;");

@@ -1,9 +1,9 @@
 # AJAX Techniques
 Just like **REST** and **GraphQL**, **AJAX** (Asynchronous Javascript and XML) is basically a guideline and it's implementation is left to the developer. Over the years though, few methods have become more popular than the others and that's what we'll be discussing about.
-* #### Hidden Frames
-* #### Image based Ajax
-* #### Dynamic Scripts
-* #### XHR (XML Http Request) 
+* **Hidden Frames**
+* **Image based Ajax**
+* **Dynamic Scripts**
+* **XHR (XML Http Request)** 
 XHR is the method that is implemented in most libraries including jQuery, Angular etc. becuase it has a really functional and simple API with event handlers to check for errors etc.
 
 ## Hidden frames (GET)
@@ -13,17 +13,17 @@ A **\<frame\>** or an **\<iframe\>** is basically like any other html tag but it
 Since a **\<frame\>** is an html element, it gets rendered on the DOM but we want it to be hidden! 
 
 Refreshing our CSS concepts, this can be achieved in the following ways
-* #### By setting it's height and width properties to 0
+* **By setting it's height and width properties to 0**
 ```html
 <iframe id="hidden_frame" height="0" width="0"></iframe>
 ```
 
-* #### By setting it's visibility property to hidden
+* **By setting it's visibility property to hidden**
 ```html
 <iframe id="hidden_frame" style="visibility: hidden"></iframe>
 ```
 
-* #### By setting it's display property to none
+* **By setting it's display property to none**
 ```html
 <iframe id="hidden_frame" style="display: none"></iframe>
 ```
@@ -59,12 +59,12 @@ Consider the following html page
 </body>
 </html>
 ```
-
-#### Heres what happens
+ 
+**Heres what happens**  
 * The input field for **SRN** has an **onBlur event handler** registered to it. When it looses focus, the **src attribute** of the **iframe** is set in **getDetails()**, which automatically makes a **GET** request to the server.
 * The **response** from the server **contains a script** that contains a call to **responseHandler()** function, to execute and populate the response on the page.
 
-#### Server Side Script (test.php)
+**Server Side Script (test.php)**  
 ```php {1,10,12}
 <script>
     <?php
@@ -118,12 +118,12 @@ This is an extension of the same technique as before but, for **POST** requests.
 </html>
 ```
 
-#### Heres what happens
+**Heres what happens**  
 * Similar to the previous example, the input field for **SRN** has an **onBlur event handler** registered to it. When it looses focus, the form is submitted. 
 * The form has it's method set to **POST** and has the **target** atribute set to the name of the **iframe**. This ensures that the user is not navigated to new page and the response from the server goes to the element specified in .
 * The **response** from the server **contains a script** that causes the **responseHandler()** function to execute and populate the response on the page.
 
-#### Server Side Script (test.php)
+**Server Side Script (test.php)**  
 ```php {3}
 <script>
     <?php

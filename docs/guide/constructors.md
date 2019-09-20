@@ -24,7 +24,8 @@ console.log(person2 instanceof Person); // True
 ```
 The type of an object can also be determined by using it's inbuilt **constructor** property. 
 
-#### For example 
+**For example**  
+ 
 ```js
 var obj = new Object() 
 console.log(person1.constructor === Person); // true
@@ -45,7 +46,8 @@ var person1 = new Person("Nicholas");
 console.log(person1.name);
 person1.sayName();
 ```
-#### Output
+**Output**  
+
     Nicholas
     Nicholas
 
