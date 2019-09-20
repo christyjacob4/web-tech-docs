@@ -195,12 +195,12 @@ There are two ways to do this on the server side.
 </body>
 </html>
 ```
-#### Here's what happens
+**Here's what happens**  
 * The input field for **User name** has an **onBlur event handler** registered to it. When it looses focus, the **src attribute** of the **image** is set, which automatically makes a **GET** request to the **URL**.
 * The event handlers for the image are assigned. If the image loads successfully, the **onload** event is triggered & if the image fails to load **onerror** event is triggered allowing us to take precautionary measures.
 * In the success method, we **check the dimensions** of the image and add an appropriate message to the **\<div\>**.
 
-#### Server Side Script (test.php)
+**Server Side Script (test.php)**  
 ```php
 <?php
 	extract($_GET);
@@ -217,7 +217,7 @@ There are two ways to do this on the server side.
 	imagejpeg($im);
 ?>
 ```
-#### Here's what happens 
+**Here's what happens**   
 * The **imagecreate()** function creates an image with the specified **width** and **height** in that order, and returns a **resource identifier** to the image.
 * Colours are allocated using the **imagecolorallocate()** function. It automatically fills the background of the image with the colour the first time you call it, as well as return an identifier for that particular colour. Subsequent calls to **imagecolorallocate()** will simply create a colour identifier, without affecting your image background.
 * We return a **1x1** image to indicate **non-availability** and a **2x2** image if the username is **available**.
@@ -276,19 +276,19 @@ This can be done as follows
 </body>
 </html>
 ```
-#### Here's what happens
+**Here's what happens**  
 * The button has an **onclick()** event handler attached to it, which is **triggered** when the **button is clicked**.
 * In the event handler, we simply **create a new \<script\>** tag and set it's **src attribute**, which triggers a **GET request** to **bar.php**. 
 * The script element is then **appended** to the **DOM**.  
 
-#### Server Side Script (bar.php)
+**Server Side Script (bar.php)**  
 ```php
 <?php
 	$text = "This is the information we send back to the client. Ideally this would be fetched from a database.";
 	echo 'document.getElementById("display").innerHTML+="'.$text.'"';
 ?>
 ```
-#### Here's what happens 
+**Here's what happens**   
 * We return **executable JS code** back to the client, where we append the fetched information to the **innerHTML** property. 
 
 Once the **php script** finishes execution, our **html page** looks like this. This causes the fetched information to be **loaded into the \<div\>** to be displayed.
@@ -331,12 +331,12 @@ This is the most popular method that is used to make AJAX requests to a remote u
 
 Let's go through the process of creating a XHR and processing its response.
 
-#### 1) Firstly we need to create a new XHR object.
+1) **Firstly we need to create a new XHR object.**  
 ```js
 var xhr = new XMLHttpRequest();
 ```
 
-#### 2) Set the readystate change handler
+2) **Set the readystate change handler**  
 The xhr object has a property called readyState that keeps track of the different events during the lifetime of an XHR onject. The readyState can take on the following values.
 
     
@@ -349,14 +349,14 @@ The xhr object has a property called readyState that keeps track of the differen
 | 4 | Completed |
 
  
-* #### Using named functions 
+* **Using named functions**   
 ```js
 function handler() {
 	// Do stuff
 }
 xhr.onreadystatechange = handler
 ```
-* #### Using anonymous functions
+* **Using anonymous functions**  
 ```js
 xhr.onreadystatechange = function(){
 	// Do Stuff
@@ -379,7 +379,7 @@ xhr.onreadystatechange = function(){
 }
 ```
 
-#### 3) Specify request parameters
+3) **Specify request parameters**  
 We then use the open method to specify our request method, the url and if the function should execute asynchronously
 ```js
 xhr.open("GET", "http://foo.com", true)
@@ -390,13 +390,11 @@ For **POST** requests, we need to additionally specify the **MIME type** of the 
 xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
 ```
 
-#### 4) Send the request
+4) **Send the request**  
 
 ```js
 xhr.send()
 ```
-
-
 
 ## Summary 
 

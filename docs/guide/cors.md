@@ -1,5 +1,6 @@
 # CORS (Cross Origin resource sharing)
-the designers icluded the same orign policy. in simple terms, an XHR can be placed only from a page hosted on a particular site to another page hosted on the same website.   
+To be done
+<!-- the designers icluded the same orign policy. in simple terms, an XHR can be placed only from a page hosted on a particular site to another page hosted on the same website.   
 
 even http -> https not allowed 
 
@@ -39,4 +40,4 @@ request takes place in two phases
 1) **OPTION** request is sent , get the response backm, check the headers 
 2) then allow the actual resource to pass through.  
 
-
+ -->
