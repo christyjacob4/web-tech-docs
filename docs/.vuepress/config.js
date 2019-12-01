@@ -16,7 +16,11 @@ module.exports = {
           'call-and-apply',
           'prototypes'   /* /foo/two.html */,
           'ajax',
-          'cors'
+          'cors',
+          'comet',
+          'web-services',
+          'performance',
+          'web-security'
         ],
       }
     }
